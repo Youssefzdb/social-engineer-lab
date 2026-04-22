@@ -1,44 +1,38 @@
 #!/usr/bin/env python3
 """
-social-engineer-lab - Security Awareness Training & SE Attack Simulation
-For security awareness training and authorized red team exercises ONLY
+social-engineer-lab - Security Awareness & Phishing Simulation Framework
+For internal awareness training and security education ONLY
 """
 import argparse
-from modules.phishing_detector import PhishingDetector
-from modules.pretexting_guide import PretextingGuide
+from modules.phishing_sim import PhishingSimulator
 from modules.awareness_trainer import AwarenessTrainer
 from modules.report import SEReport
 
 def main():
     parser = argparse.ArgumentParser(description="Social Engineering Awareness Lab")
-    parser.add_argument("--mode", choices=["detect", "train", "guide", "full"], default="full")
-    parser.add_argument("--email", help="Email file to analyze for phishing")
-    parser.add_argument("--url", help="URL to check for phishing indicators")
+    parser.add_argument("--mode", choices=["simulate", "train", "analyze"], default="train")
+    parser.add_argument("--target-file", help="CSV file with target users (for authorized simulations)")
+    parser.add_argument("--template", default="generic", help="Phishing template name")
     parser.add_argument("--output", default="se_report.html")
     args = parser.parse_args()
 
+    print(f"[*] Social Engineer Lab | mode: {args.mode}")
+    print("[!] WARNING: Use only on systems/users you have WRITTEN AUTHORIZATION for")
+
     results = {}
-    print("[*] Social Engineer Lab - Awareness Training Mode")
 
-    if args.mode in ["detect", "full"] and args.email:
-        detector = PhishingDetector()
-        results["phishing"] = detector.analyze_email(args.email)
-
-    if args.mode in ["detect", "full"] and args.url:
-        detector = PhishingDetector()
-        results["url_check"] = detector.check_url(args.url)
-
-    if args.mode in ["train", "full"]:
+    if args.mode == "train":
         trainer = AwarenessTrainer()
-        results["training"] = trainer.get_scenarios()
+        results["training"] = trainer.run()
+    elif args.mode == "simulate" and args.target_file:
+        sim = PhishingSimulator(args.target_file, args.template)
+        results["simulation"] = sim.prepare()
+    elif args.mode == "analyze":
+        trainer = AwarenessTrainer()
+        results["analysis"] = trainer.analyze_awareness()
 
-    if args.mode in ["guide", "full"]:
-        guide = PretextingGuide()
-        results["guide"] = guide.get_indicators()
-
-    report = SEReport(results)
-    report.save(args.output)
-    print(f"[+] Report saved: {args.output}")
+    SEReport(results).save(args.output)
+    print(f"[+] Report: {args.output}")
 
 if __name__ == "__main__":
     main()
