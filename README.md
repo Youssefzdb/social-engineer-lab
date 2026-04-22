@@ -1,40 +1,23 @@
-# SocialEngineer-Lab
+# social-engineer-lab 🎭
 
-> Social Engineering Simulation Platform
-
-![Python](https://img.shields.io/badge/Python-3.10+-blue) ![License](https://img.shields.io/badge/License-MIT-green) ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
-
-## Overview
-
-SocialEngineer-Lab is a professional cybersecurity tool built for penetration testers, red teamers, and security researchers. It is designed to assist in authorized security assessments and research.
+Social Engineering Simulation & Awareness Platform
 
 ## Features
-
-- 🔍 **Recon Module** — Target discovery and information gathering
-- 💉 **Exploit Engine** — Modular attack simulation framework
-- 📊 **Reporting** — Automated findings documentation
-- 🛡️ **Defense Testing** — Validate your security controls
-- 🔐 **Stealth Mode** — Evasion and obfuscation techniques
-
-## Installation
-
-```bash
-git clone https://github.com/Youssefzdb/vegas-fun-zone
-cd SocialEngineer
-pip install -r requirements.txt
-```
+- Phishing campaign template generator (IT support, CEO fraud, delivery)
+- Employee awareness scoring
+- Red flag indicators for training
+- JSON report export
 
 ## Usage
-
 ```bash
-python3 main.py --target <IP> --mode full
-python3 main.py --help
+pip install -r requirements.txt
+
+# Generate phishing awareness campaign
+python main.py --mode phishing --target-list employees.txt
+
+# Score awareness results
+python main.py --results campaign_results.json
 ```
 
-## Disclaimer
-
-> This tool is for authorized security testing and educational purposes only. Always obtain written permission before testing any target.
-
-## Author
-
-**Shadow Core** — Cybersecurity Specialist | Penetration Tester
+## Purpose
+For authorized security awareness training programs only.
