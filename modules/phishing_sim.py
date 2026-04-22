@@ -1,91 +1,44 @@
 #!/usr/bin/env python3
-"""
-Phishing Simulation Trainer
-Generates awareness email templates for authorized security training
-"""
-import csv
-from datetime import datetime
+"""Phishing Simulation - Generate awareness campaign templates"""
 
 TEMPLATES = {
-    "generic": {
-        "subject": "Action Required: Verify Your Account",
-        "body": """Dear {name},
-
-We detected unusual activity on your account. Please verify your identity within 24 hours.
-
-Click here to verify: {tracking_url}
-
-Security Team""",
-        "indicators": [
-            "Urgency and time pressure",
-            "Generic greeting",
-            "Suspicious link",
-            "Fear-based language"
-        ]
-    },
     "it_support": {
-        "subject": "IT: Password Reset Required",
-        "body": """Hi {name},
-
-Your password expires today. Reset it immediately to avoid losing access.
-
-Reset link: {tracking_url}
-
-IT Department""",
-        "indicators": [
-            "False urgency",
-            "IT impersonation",
-            "Password phishing"
-        ]
+        "subject": "Urgent: Password Reset Required",
+        "body": "Dear {name},\n\nOur security team detected suspicious activity on your account.\nPlease reset your password immediately: {link}\n\nIT Support Team",
+        "indicators": ["urgency language", "generic greeting", "suspicious link", "no personalization"]
     },
-    "invoice": {
-        "subject": "Invoice #{invoice_num} - Payment Due",
-        "body": """Dear {name},
-
-Please find attached invoice #{invoice_num} for $2,847.00 due today.
-
-View invoice: {tracking_url}
-
-Accounts Department""",
-        "indicators": [
-            "Financial urgency",
-            "Fake invoice",
-            "Malicious attachment lure"
-        ]
+    "ceo_fraud": {
+        "subject": "Quick favor needed",
+        "body": "Hi {name},\n\nI need you to urgently process a wire transfer. Please keep this confidential.\nAmount: $25,000 to account: {account}\n\nCEO",
+        "indicators": ["authority pressure", "urgency", "secrecy request", "financial request"]
+    },
+    "package_delivery": {
+        "subject": "Your package could not be delivered",
+        "body": "Dear customer,\n\nWe tried to deliver your package but failed.\nTrack here: {link}\n\nDelivery Service",
+        "indicators": ["vague sender", "suspicious link", "no order details", "urgency"]
     }
 }
 
 class PhishingSimulator:
-    def __init__(self, target_file, template_name="generic"):
-        self.target_file = target_file
-        self.template = TEMPLATES.get(template_name, TEMPLATES["generic"])
-        self.targets = []
+    def __init__(self, target_list_path):
+        self.path = target_list_path
 
-    def load_targets(self):
+    def generate_campaign(self):
+        targets = []
         try:
-            with open(self.target_file) as f:
-                reader = csv.DictReader(f)
-                self.targets = list(reader)
-            print(f"[+] Loaded {len(self.targets)} targets")
-        except Exception as e:
-            print(f"[-] Error loading targets: {e}")
+            with open(self.path) as f:
+                targets = [l.strip() for l in f if l.strip()]
+        except:
+            pass
 
-    def prepare(self):
-        self.load_targets()
         campaigns = []
-        for i, target in enumerate(self.targets):
-            tracking_id = f"trk_{i}_{datetime.now().strftime('%Y%m%d')}"
-            email = self.template["body"].format(
-                name=target.get("name", "User"),
-                tracking_url=f"http://awareness-training.internal/track/{tracking_id}",
-                invoice_num=f"INV-{2000+i}"
-            )
+        for template_name, template in TEMPLATES.items():
             campaigns.append({
-                "target": target.get("email", ""),
-                "name": target.get("name", ""),
-                "subject": self.template["subject"],
-                "tracking_id": tracking_id,
-                "template_indicators": self.template["indicators"]
+                "template": template_name,
+                "subject": template["subject"],
+                "target_count": len(targets),
+                "red_flags": template["indicators"],
+                "awareness_tips": [f"Watch for: {ind}" for ind in template["indicators"]]
             })
-            print(f"[+] Prepared campaign for: {target.get('email','')}")
+            print(f"[+] Campaign template: {template_name}")
         return campaigns
