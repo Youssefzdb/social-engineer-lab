@@ -1,42 +1,73 @@
 #!/usr/bin/env python3
-"""Awareness Training Scenarios"""
+"""
+Security Awareness Trainer
+Teaches users how to identify social engineering attacks
+"""
 
-SCENARIOS = [
-    {
-        "id": 1,
-        "title": "Suspicious Email",
-        "scenario": "You receive an email saying 'Your Office 365 account will expire in 24h. Click here to verify.'",
-        "correct_action": "Do NOT click. Report to IT security immediately.",
-        "red_flags": ["Urgency", "Generic greeting", "Suspicious link", "Threat of account loss"],
-        "category": "Phishing"
-    },
-    {
-        "id": 2,
-        "title": "IT Support Call",
-        "scenario": "Someone calls claiming to be IT support, says they detected malware and need your login to fix it.",
-        "correct_action": "Hang up. Call IT directly using the internal directory number.",
-        "red_flags": ["Password request", "Unsolicited call", "Urgency", "Pressure tactics"],
-        "category": "Vishing"
-    },
-    {
-        "id": 3,
-        "title": "USB Drop",
-        "scenario": "You find a USB drive labeled 'Salary Info Q4' in the parking lot.",
-        "correct_action": "Do NOT plug it in. Hand it to IT security.",
-        "red_flags": ["Unknown origin", "Enticing label", "Physical bait"],
-        "category": "Baiting"
-    },
-    {
-        "id": 4,
-        "title": "Tailgating",
-        "scenario": "Someone in a delivery uniform asks you to hold the door to the server room.",
-        "correct_action": "Politely decline. Ask them to use the reception process.",
-        "red_flags": ["No badge", "Physical access request", "Social pressure"],
-        "category": "Physical SE"
-    }
+PHISHING_INDICATORS = {
+    "Urgency / Fear": [
+        "Act now or your account will be closed",
+        "Verify within 24 hours",
+        "Your account has been compromised",
+        "Immediate action required"
+    ],
+    "Suspicious Sender": [
+        "Email from free domains (gmail/yahoo) claiming to be a company",
+        "Slight misspelling: paypa1.com vs paypal.com",
+        "Display name doesn't match email address"
+    ],
+    "Suspicious Links": [
+        "Hover over links — check URL before clicking",
+        "Shortened URLs hiding destination",
+        "HTTP instead of HTTPS",
+        "URL doesn't match the displayed company"
+    ],
+    "Attachment Tricks": [
+        "Unexpected invoice/document attachments",
+        "Double extensions: invoice.pdf.exe",
+        "Password-protected zip files"
+    ],
+    "Request for Credentials": [
+        "Legitimate companies never ask for passwords via email",
+        "Requests to verify SSN, credit card, or password"
+    ]
+}
+
+VISHING_TACTICS = [
+    "Caller ID spoofing — attacker appears as trusted number",
+    "Pretexting — attacker creates false scenario (IT support, bank)",
+    "Voice urgency — creates panic to bypass critical thinking",
+]
+
+PRETEXTING_SCENARIOS = [
+    "IT Support: 'I need your password to fix your account'",
+    "CEO Fraud: 'Wire transfer this amount immediately, it's urgent'",
+    "Vendor: 'We updated our banking info, please use the new account'",
 ]
 
 class AwarenessTrainer:
-    def get_scenarios(self):
-        print(f"[+] Loaded {len(SCENARIOS)} training scenarios")
-        return SCENARIOS
+    def run(self):
+        print("[*] Running security awareness training module...")
+        training_content = {
+            "phishing_indicators": PHISHING_INDICATORS,
+            "vishing_tactics": VISHING_TACTICS,
+            "pretexting_scenarios": PRETEXTING_SCENARIOS,
+            "best_practices": [
+                "Always verify requests via a separate channel (phone call)",
+                "Never click links in unsolicited emails — go directly to the site",
+                "Report suspicious emails to your security team",
+                "Enable MFA on all accounts",
+                "Think before you click — slow down when pressured"
+            ]
+        }
+        print("[+] Training content loaded")
+        return training_content
+
+    def analyze_awareness(self):
+        print("[*] Analyzing common SE attack patterns...")
+        return {
+            "most_common_attacks": ["Spear Phishing", "BEC Fraud", "Vishing", "Smishing"],
+            "most_targeted_industries": ["Finance", "Healthcare", "Government", "Education"],
+            "average_click_rate": "17% of employees click phishing links",
+            "mitigation": "Regular training reduces click rates to below 5%"
+        }
