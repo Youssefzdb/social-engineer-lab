@@ -7,36 +7,31 @@ class SEReport:
         self.results = results
 
     def save(self, filename):
-        training_html = ""
-        for s in self.results.get("training", []):
-            training_html += f"""
-            <div class="scenario">
-              <h3>Scenario {s['id']}: {s['title']} <span class="tag">{s['category']}</span></h3>
-              <p><b>Situation:</b> {s['scenario']}</p>
-              <p><b>Correct Action:</b> <span style="color:#22c55e">{s['correct_action']}</span></p>
-              <p><b>Red Flags:</b> {', '.join(s['red_flags'])}</p>
-            </div>"""
+        content = json.dumps(self.results, indent=2, default=str)
+        training = self.results.get("training", {})
+        best_practices = training.get("best_practices", [])
+        bp_html = "".join(f"<li>{bp}</li>" for bp in best_practices)
 
-        phishing = self.results.get("phishing", {})
-        phishing_html = ""
-        for f in phishing.get("findings", []):
-            phishing_html += f"<li class='{f['severity'].lower()}'>[{f['severity']}] {f['indicator']}</li>"
+        indicators = training.get("phishing_indicators", {})
+        ind_html = ""
+        for category, items in indicators.items():
+            ind_html += f"<h3>{category}</h3><ul>"
+            ind_html += "".join(f"<li>{i}</li>" for i in items)
+            ind_html += "</ul>"
 
-        html = f"""<!DOCTYPE html>
-<html><head><title>SE Awareness Lab</title>
+        html = f"""<!DOCTYPE html><html><head><title>SE Awareness Report</title>
 <style>
-body{{font-family:Arial;background:#0f172a;color:#e2e8f0;padding:20px}}
-h1{{color:#f59e0b}} h2{{color:#fbbf24}}
-.scenario{{background:#1e293b;border-radius:8px;padding:15px;margin:10px 0;border-left:4px solid #f59e0b}}
-.tag{{background:#1d4ed8;padding:2px 8px;border-radius:12px;font-size:0.8em}}
-.high{{color:#ef4444}} .medium{{color:#f59e0b}} .low{{color:#22c55e}}
+body{{font-family:Arial;background:#0a1628;color:#e2e8f0;padding:20px}}
+h1{{color:#60a5fa}} h2{{color:#93c5fd}} h3{{color:#bfdbfe}}
+.card{{background:#1e3a5f;border-radius:8px;padding:15px;margin:10px 0}}
+li{{margin:5px 0;line-height:1.6}}
 </style></head>
 <body>
-<h1>Social Engineering Awareness Lab</h1>
-<p>{datetime.now().strftime('%Y-%m-%d %H:%M')}</p>
-<h2>Training Scenarios</h2>
-{training_html}
-{f'<h2>Phishing Analysis</h2><ul>{phishing_html}</ul>' if phishing_html else ''}
+<h1>Social Engineering Awareness Report</h1>
+<p>{datetime.now().strftime('%Y-%m-%d %H:%M')} | For authorized security training use only</p>
+<div class="card"><h2>Phishing Indicators</h2>{ind_html}</div>
+<div class="card"><h2>Best Practices</h2><ul>{bp_html}</ul></div>
+<div class="card"><h2>Raw Data</h2><pre style="font-size:0.8em;overflow:auto">{content[:2000]}</pre></div>
 </body></html>"""
         with open(filename, "w") as f:
             f.write(html)
