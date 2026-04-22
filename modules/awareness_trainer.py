@@ -1,73 +1,38 @@
 #!/usr/bin/env python3
-"""
-Security Awareness Trainer
-Teaches users how to identify social engineering attacks
-"""
+"""Awareness Trainer - Generate security awareness training material"""
 
-PHISHING_INDICATORS = {
-    "Urgency / Fear": [
-        "Act now or your account will be closed",
-        "Verify within 24 hours",
-        "Your account has been compromised",
-        "Immediate action required"
-    ],
-    "Suspicious Sender": [
-        "Email from free domains (gmail/yahoo) claiming to be a company",
-        "Slight misspelling: paypa1.com vs paypal.com",
-        "Display name doesn't match email address"
-    ],
-    "Suspicious Links": [
-        "Hover over links — check URL before clicking",
-        "Shortened URLs hiding destination",
-        "HTTP instead of HTTPS",
-        "URL doesn't match the displayed company"
-    ],
-    "Attachment Tricks": [
-        "Unexpected invoice/document attachments",
-        "Double extensions: invoice.pdf.exe",
-        "Password-protected zip files"
-    ],
-    "Request for Credentials": [
-        "Legitimate companies never ask for passwords via email",
-        "Requests to verify SSN, credit card, or password"
-    ]
-}
-
-VISHING_TACTICS = [
-    "Caller ID spoofing — attacker appears as trusted number",
-    "Pretexting — attacker creates false scenario (IT support, bank)",
-    "Voice urgency — creates panic to bypass critical thinking",
-]
-
-PRETEXTING_SCENARIOS = [
-    "IT Support: 'I need your password to fix your account'",
-    "CEO Fraud: 'Wire transfer this amount immediately, it's urgent'",
-    "Vendor: 'We updated our banking info, please use the new account'",
+TRAINING_MODULES = [
+    {
+        "title": "Recognizing Phishing Emails",
+        "content": "Learn to spot suspicious senders, urgent language, and fake links.",
+        "quiz": [
+            {"q": "An email from 'it-support@company-helpdesk.net' asks you to reset your password. What do you do?",
+             "a": "Contact IT directly through official channels, never click the link."},
+            {"q": "You receive an invoice from an unknown vendor. What's the red flag?",
+             "a": "Unexpected invoice from unknown sender — verify with finance before opening."}
+        ]
+    },
+    {
+        "title": "Social Engineering Tactics",
+        "content": "Understand pretexting, baiting, quid pro quo, and tailgating attacks.",
+        "quiz": [
+            {"q": "Someone calls claiming to be IT and asks for your password. What do you do?",
+             "a": "Never share passwords by phone. Hang up and verify through official directory."}
+        ]
+    },
+    {
+        "title": "Password Security",
+        "content": "Use strong passwords, enable MFA, and never reuse passwords.",
+        "quiz": [
+            {"q": "Which password is strongest? abc123 / P@ssw0rd / correct-horse-battery-staple",
+             "a": "correct-horse-battery-staple — long passphrases are hardest to crack."}
+        ]
+    }
 ]
 
 class AwarenessTrainer:
-    def run(self):
-        print("[*] Running security awareness training module...")
-        training_content = {
-            "phishing_indicators": PHISHING_INDICATORS,
-            "vishing_tactics": VISHING_TACTICS,
-            "pretexting_scenarios": PRETEXTING_SCENARIOS,
-            "best_practices": [
-                "Always verify requests via a separate channel (phone call)",
-                "Never click links in unsolicited emails — go directly to the site",
-                "Report suspicious emails to your security team",
-                "Enable MFA on all accounts",
-                "Think before you click — slow down when pressured"
-            ]
-        }
-        print("[+] Training content loaded")
-        return training_content
-
-    def analyze_awareness(self):
-        print("[*] Analyzing common SE attack patterns...")
-        return {
-            "most_common_attacks": ["Spear Phishing", "BEC Fraud", "Vishing", "Smishing"],
-            "most_targeted_industries": ["Finance", "Healthcare", "Government", "Education"],
-            "average_click_rate": "17% of employees click phishing links",
-            "mitigation": "Regular training reduces click rates to below 5%"
-        }
+    def generate_material(self):
+        print(f"[+] Generating {len(TRAINING_MODULES)} training modules")
+        for module in TRAINING_MODULES:
+            print(f"[*] Module: {module['title']}")
+        return TRAINING_MODULES
